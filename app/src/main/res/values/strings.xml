@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UpworkProject</string>
+    <string name="toolbarTitle">BMI Details</string>
+    <string name="titlePlaceholder">BODY MASS INDEX</string>
+    <string name="contentTitle">HELLO OLIVIA, YOU ARE NORMAL</string>
+    <string name="contentSubtitle">Normal BMI range: 18.5kg/m2 - 25kg/m2\nPonderal Index: 10.64kg/m3</string>
+    <string name="shareBtn">Share</string>
+    <string name="rateBtn">Rate</string>
+</resources>

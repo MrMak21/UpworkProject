@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/appToolbar"
+        layout="@layout/toolbar_layout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_50dp"
+        android:layout_marginEnd="@dimen/common_50dp"
+        android:background="@drawable/gradient_color_bg_180"
+        android:paddingBottom="@dimen/common_16dp"
+        app:layout_constraintBottom_toTopOf="@id/adContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appToolbar">
+
+        <View
+            android:id="@+id/dividerView1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_1dp"
+            android:layout_marginTop="@dimen/common_50dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/titlePlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_8dp"
+            android:layout_marginBottom="@dimen/common_8dp"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/common_text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerView1"
+            tools:text="BODY MASS INDEX" />
+
+
+        <View
+            android:id="@+id/dividerView2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_1dp"
+            android:layout_marginTop="@dimen/common_8dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titlePlaceholder" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bodyMassValueContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_50dp"
+            android:paddingStart="@dimen/common_8dp"
+            android:paddingEnd="@dimen/common_8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerView2">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/bodyMassValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_text_70sp"
+                app:layout_constraintEnd_toStartOf="@+id/bodyMassValueSecond"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/bodyMassValueSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_50dp"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_text_30sp"
+                app:layout_constraintBottom_toBottomOf="@+id/bodyMassValue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bodyMassValue"
+                android:text=".64" />
+
+
+            <View
+                android:id="@+id/dividerView3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/common_1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/contentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_50dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bodyMassValueContainer"
+            tools:text="HELLO OLIVIA, YOU ARE NORMAL" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/contentSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contentTitle"
+            tools:text="Normal BMI range: 18.5kg/m2 - 25kg/m2\nPonderal Index: 10.64kg/m3" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/shareBtn"
+            android:layout_width="@dimen/common_120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_50dp"
+            android:background="@drawable/button_border_bg"
+            android:drawableStart="@drawable/ic_baseline_share_24"
+            android:drawablePadding="@dimen/common_8dp"
+            android:paddingStart="@dimen/common_10dp"
+            android:paddingEnd="@dimen/common_20dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/rateBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contentSubtitle"
+            tools:text="Share" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/rateBtn"
+            android:layout_width="@dimen/common_120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_50dp"
+            android:background="@drawable/button_border_bg"
+            android:drawableStart="@drawable/ic_baseline_star_rate_24"
+            android:paddingStart="@dimen/common_10dp"
+            android:paddingEnd="@dimen/common_20dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/shareBtn"
+            app:layout_constraintTop_toBottomOf="@+id/contentSubtitle"
+            tools:text="Rate" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/adContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_100dp"
+        android:src="@drawable/samsung_ad"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
