@@ -7,6 +7,7 @@
    <dimen name="common_10dp">10dp</dimen>
    <dimen name="common_16dp">16dp</dimen>
    <dimen name="common_20dp">20dp</dimen>
+   <dimen name="common_30dp">30dp</dimen>
    <dimen name="common_50dp">50dp</dimen>
    <dimen name="common_100dp">100dp</dimen>
    <dimen name="common_120dp">120dp</dimen>
