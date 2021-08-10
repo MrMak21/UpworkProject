@@ -1,8 +1,20 @@
 package gr.atcom.upworkproject
 
+import android.R.attr.data
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ShareCompat
+import androidx.core.content.FileProvider
 import gr.atcom.upworkproject.databinding.ActivityMainBinding
+import java.io.File
+import java.io.FileOutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
+
+//        throw RuntimeException("Test Crash") // Force a crash
 
         getPassData()
         initResources()
@@ -39,6 +53,21 @@ class MainActivity : AppCompatActivity() {
         binding.appToolbar.toolbarBackImageView.setOnClickListener {
             onBackPressed()
         }
+
+        binding.shareBtn.setOnClickListener {
+            val bitmap = getScreenShot(window.decorView.rootView)
+            if (bitmap != null) {
+                store(bitmap)
+            }
+        }
+
+        binding.rateBtn.setOnClickListener {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.appovo.bmicalculator")))
+            } catch (e: ActivityNotFoundException) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.appovo.bmicalculator")))
+            }
+        }
     }
 
     private fun getPassData() {
@@ -47,6 +76,52 @@ class MainActivity : AppCompatActivity() {
             name = intent.extras!!.getString(getString(R.string.bmiNameBundle))!!
         }
     }
+
+    fun getScreenShot(view: View): Bitmap? {
+        val screenView: View = view.getRootView()
+        screenView.setDrawingCacheEnabled(true)
+        val bitmap: Bitmap = Bitmap.createBitmap(screenView.getDrawingCache())
+        screenView.setDrawingCacheEnabled(false)
+        return bitmap
+    }
+
+    fun store(bm: Bitmap) {
+        val filename = "screenshot.png"
+//        val sd = Environment.getExternalStorageDirectory()
+        val sd = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        val dest = File(sd, filename)
+
+        try {
+            val out = FileOutputStream(dest)
+            bm.compress(Bitmap.CompressFormat.PNG, 90, out)
+            out.flush()
+            out.close()
+
+            shareFile(dest)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Cannot share image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun shareFile(file: File) {
+
+
+        // Write data in your file
+        val uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+
+        val intent = ShareCompat.IntentBuilder.from(this)
+            .setStream(uri) // uri from FileProvider
+            .setType("text/html")
+            .intent
+            .setAction(Intent.ACTION_VIEW) //Change if needed
+            .setDataAndType(uri, "image/*")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        startActivity(intent)
+    }
+
 
     private fun setBmiResults(bmi: Double) {
         if (bmi == -1.0)
