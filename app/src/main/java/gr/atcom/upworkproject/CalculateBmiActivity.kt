@@ -3,6 +3,7 @@ package gr.atcom.upworkproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import gr.atcom.upworkproject.databinding.ActivityCalculateBmiBinding
 import gr.atcom.upworkproject.presenter.BmiCalculationPresenter
@@ -39,6 +40,10 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
 
     private fun initLayout() {
         binding.bmiInputBtn.setOnClickListener {
+            if (binding.nameInput.text.toString().isEmpty()) {
+                Toast.makeText(this,"Please add name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             presenter.calculateBmi(
                 binding.weightPicker.value,
                 binding.heightPicker.value,
