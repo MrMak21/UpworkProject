@@ -23,6 +23,10 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed(Runnable {
             val intent = Intent(baseContext, CalculateBmiActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(
+                R.anim.animation_slide_up,
+                R.anim.animation_zoom_out
+            )
             finish()
         }, 3000)
     }

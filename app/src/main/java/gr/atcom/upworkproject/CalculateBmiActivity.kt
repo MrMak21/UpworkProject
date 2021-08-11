@@ -3,8 +3,15 @@ package gr.atcom.upworkproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import gr.atcom.upworkproject.databinding.ActivityCalculateBmiBinding
 import gr.atcom.upworkproject.presenter.BmiCalculationPresenter
 import gr.atcom.upworkproject.view.BmiCalculationView
@@ -12,6 +19,7 @@ import gr.atcom.upworkproject.view.BmiCalculationView
 
 class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
 
+    private var mInterstitialAd: InterstitialAd? = null
     lateinit var binding: ActivityCalculateBmiBinding
     lateinit var presenter: BmiCalculationPresenter
 
@@ -25,6 +33,9 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
 
         initResources()
         initLayout()
+
+        // Initializing Interstitial ads
+        initAdMob()
     }
 
 
@@ -40,16 +51,13 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
 
     private fun initLayout() {
         binding.bmiInputBtn.setOnClickListener {
-            if (binding.nameInput.text.toString().isEmpty()) {
-                Toast.makeText(this,"Please add name", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(this)
+            } else {
+                Log.d("AdMob", "The interstitial ad wasn't ready yet.")
+                calculateBmi()
             }
-            presenter.calculateBmi(
-                binding.weightPicker.value,
-                binding.heightPicker.value,
-                binding.genderPicker.value,
-                binding.nameInput.text.toString()
-            )
         }
 
         binding.appToolbar.toolbarBackImageView.setOnClickListener {
@@ -73,6 +81,59 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
         binding.genderPicker.value = 0
     }
 
+    private fun initAdMob() {
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3940256099942544/1033173712",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("AdMob", adError?.message)
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d("AdMob", "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+
+                    mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            Log.d("AdMob", "Ad was dismissed.")
+                            mInterstitialAd = null
+                            calculateBmi()
+                        }
+
+                        override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                            Log.d("AdMob", "Ad failed to show.")
+                        }
+
+                        override fun onAdShowedFullScreenContent() {
+                            Log.d("AdMob", "Ad showed fullscreen content.")
+                            mInterstitialAd = null
+                        }
+                    }
+                }
+            })
+
+
+
+    }
+
+    private fun calculateBmi() {
+        if (binding.nameInput.text.toString().isEmpty()) {
+            Toast.makeText(applicationContext, "Please add name", Toast.LENGTH_SHORT).show()
+            return
+        }
+        presenter.calculateBmi(
+            binding.weightPicker.value,
+            binding.heightPicker.value,
+            binding.genderPicker.value,
+            binding.nameInput.text.toString()
+        )
+    }
+
     override fun showBmi(bmi: Double, name: String) {
         val intent = Intent(this, MainActivity::class.java)
         val bundle = Bundle()
@@ -80,6 +141,10 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
         bundle.putString(getString(R.string.bmiNameBundle), name)
         intent.putExtras(bundle)
         startActivity(intent)
+        overridePendingTransition(
+            R.anim.animation_slide_up,
+            R.anim.animation_zoom_out
+        )
     }
 
 

@@ -1,17 +1,24 @@
 package gr.atcom.upworkproject
 
-import android.R.attr.data
+import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
 import gr.atcom.upworkproject.databinding.ActivityMainBinding
 import java.io.File
 import java.io.FileOutputStream
@@ -21,7 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
-    var bmiValue: Double = -1.0
+    private val PERMISSION_ALL = 25
+    private var bmiValue: Double = -1.0
     lateinit var name: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +39,15 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        MobileAds.initialize(this) {}
+        initAdMob()
+
 //        throw RuntimeException("Test Crash") // Force a crash
 
         getPassData()
         initResources()
         initLayout()
+//        checkPermissions()
     }
 
     private fun initResources() {
@@ -68,6 +80,38 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.appovo.bmicalculator")))
             }
         }
+    }
+
+    private fun initAdMob() {
+        val adLoader = AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110") //test id
+            .forNativeAd { ad : NativeAd ->
+                // Show the ad.
+                ad.headline?.let {
+                    binding.addTitle.text = it
+                }
+
+                ad.body?.let {
+                    binding.addBody.text = it
+                }
+
+                ad.icon?.let {
+                    binding.addImage.setImageDrawable(it.drawable)
+                }
+
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    // Handle the failure by logging, altering the UI, and so on.
+                }
+            })
+            .withNativeAdOptions(
+                NativeAdOptions.Builder()
+                // Methods in the NativeAdOptions.Builder class can be
+                // used here to specify individual options settings.
+                .build())
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 
     private fun getPassData() {
@@ -167,5 +211,38 @@ class MainActivity : AppCompatActivity() {
 
         val shownText = "HELLO ${name.toUpperCase()}, YOU ARE $weightStatus"
         binding.contentTitle.text = shownText
+    }
+
+    private fun checkPermissions() {
+        val PERMISSIONS = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        } else {
+            Log.d("Permissions","Has permissions")
+        }
+    }
+
+    private fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {
+        if (context != null) {
+            for (perm in permissions) {
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        perm
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.animation_still, R.anim.animation_slide_out_right)
     }
 }
