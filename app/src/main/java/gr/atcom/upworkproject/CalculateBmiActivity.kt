@@ -36,7 +36,16 @@ class CalculateBmiActivity : AppCompatActivity(), BmiCalculationView {
 
         // Initializing Interstitial ads
         initAdMob()
+//        initAd()
     }
+    private fun initAd() {
+        val adRequest = AdRequest.Builder().build()
+//        binding.adView.adListener = adListener
+//        binding.adView.loadAd(adRequest)
+
+
+    }
+
 
 
     private fun initResources() {

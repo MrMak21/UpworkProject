@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this) {}
         initAdMob()
+        initAd()
 
 //        throw RuntimeException("Test Crash") // Force a crash
 
@@ -112,6 +113,14 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         adLoader.loadAd(AdRequest.Builder().build())
+    }
+
+    private fun initAd() {
+        val adRequest = AdRequest.Builder().build()
+//        binding.adView.adListener = adListener
+        binding.adView.loadAd(adRequest)
+
+
     }
 
     private fun getPassData() {

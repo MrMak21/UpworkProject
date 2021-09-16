@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <declare-styleable name="SectionProgressView">
+        <attr name="background_color" format="color" />
+        <attr name="progress_color" format="color" />
+        <attr name="progress_shadow_color" format="color" />
+        <attr name="steps_count" format="integer" />
+        <attr name="current_step" format="integer" />
+        <attr name="shadow_radius" format="float" />
+        <attr name="shadow_dx" format="float" />
+        <attr name="shadow_dy" format="float" />
+    </declare-styleable>
+
+
+</resources>
